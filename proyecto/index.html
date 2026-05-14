@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gestión de Inventario</h1>
+        
+        <!-- Pestañas -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="cambiarTab('insumos')">Insumos</button>
+            <button class="tab-btn" onclick="cambiarTab('productos')">Productos Terminados</button>
+        </div>
+
+        <!-- Formulario Insumos -->
+        <div id="tab-insumos" class="tab-content active">
+            <h2>Gestión de Insumos</h2>
+            <form id="formInsumos" onsubmit="guardarInsumo(event)">
+                <input type="hidden" id="idInsumo">
+                
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" id="nombreInsumo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea id="descripcionInsumo" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Unidad de Medida:</label>
+                    <input type="number" step="0.01" id="unidadMedidaInsumo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Peso Unitario:</label>
+                    <input type="number" step="0.01" id="pesoUnitarioInsumo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Valor Unitario:</label>
+                    <input type="number" step="0.01" id="valorUnitarioInsumo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ID Fracción Único (FK):</label>
+                    <input type="number" id="idFraccionYnico" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ID Exportación (FK):</label>
+                    <input type="number" id="idExportacion" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-warning" onclick="limpiarFormulario('insumos')">Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Formulario Productos Terminados -->
+        <div id="tab-productos" class="tab-content">
+            <h2>Gestión de Productos Terminados</h2>
+            <form id="formProductos" onsubmit="guardarProducto(event)">
+                <input type="hidden" id="idProducto">
+                
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" id="nombreProducto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea id="descripcionProducto" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Unidad de Medida:</label>
+                    <input type="number" step="0.01" id="unidadMedidaProducto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Peso Unitario:</label>
+                    <input type="number" step="0.01" id="pesoUnitarioProducto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Valor Unitario:</label>
+                    <input type="number" step="0.01" id="valorUnitarioProducto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ID Insumo Relacionado:</label>
+                    <select id="idInsumoFK" required>
+                        <option value="">Seleccionar insumo</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-warning" onclick="limpiarFormulario('productos')">Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tablas -->
+        <div class="tablas-container">
+            <div id="tabla-insumos" class="tabla-content active">
+                <h3>Lista de Insumos</h3>
+                <div class="search-box">
+                    <input type="text" id="buscarInsumo" placeholder="Buscar insumo..." onkeyup="cargarInsumos()">
+                </div>
+                <table id="tablaInsumos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Unidad Medida</th>
+                            <th>Peso Unitario</th>
+                            <th>Valor Unitario</th>
+                            <th>ID Fracción</th>
+                            <th>ID Exportación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyInsumos"></tbody>
+                </table>
+            </div>
+            
+            <div id="tabla-productos" class="tabla-content">
+                <h3>Lista de Productos Terminados</h3>
+                <div class="search-box">
+                    <input type="text" id="buscarProducto" placeholder="Buscar producto..." onkeyup="cargarProductos()">
+                </div>
+                <table id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Unidad Medida</th>
+                            <th>Peso Unitario</th>
+                            <th>Valor Unitario</th>
+                            <th>ID Insumo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyProductos"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
