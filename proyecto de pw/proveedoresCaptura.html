@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/formularios.css">
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const formulario = document.getElementById("formProveedor");
+    const mensaje = document.getElementById("mensaje");
+
+    formulario.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        mensaje.textContent = "Proveedor registrado correctamente";
+        formulario.reset();
+
+        setTimeout(function() {
+            mensaje.textContent = "";
+        }, 3000);
+    });
+});
+</script>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>PROVEEDORES</h1>
+        <p id="mensaje" class="mensaje"></p>
+        <form id="formDestinatario" class="formulario">
+            <input type="text" placeholder="NOMBRE" required>
+            <input type="text" placeholder="NÚMERO" required>
+            <input type="text" placeholder="ENTIDAD FISCAL" required>
+            <input type="text" placeholder="CALLE" required>
+            <input type="text" placeholder="CONTACTO" required>
+            <input type="text" placeholder="COLONIA" required>
+            <input type="text" placeholder="PAÍS" required>
+
+            <button type="submit">SUBMIT</button>
+        </form>
+    </div>
+</body>
+</html>
