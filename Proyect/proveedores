@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores</title>
+    <style>
+        :root {
+            --bg-color: #f0f0f0;
+            --header-bg: #1d2d44;
+            --input-bg: #eeeeee;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .logiflow-header {
+            background-color: var(--header-bg);
+            color: var(--white);
+            padding: 15px 40px;
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            margin: 20px 0;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .form-card {
+            background-color: var(--white);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* tres columnas */
+            gap: 20px 30px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field label {
+            font-weight: bold;
+            font-size: 13px;
+            margin-left: 10px;
+        }
+
+        .field input {
+            background-color: var(--input-bg);
+            border: none;
+            border-radius: 20px;
+            padding: 12px 15px;
+            outline: none;
+        }
+
+        .form-footer {
+            grid-column: 2; /* debajo de la columna central (Colonia) */
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn-submit {
+            background-color: var(--white);
+            border: 2px solid #000;
+            border-bottom: 5px solid #000; 
+            border-radius: 30px;
+            padding: 12px 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn-submit:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="logiflow-header">
+            <span class="header-menu">MENU</span>
+            <div class="header-logo">
+                <span class="logo-icon">⬢</span> LOGIFLOW
+            </div>
+            <span class="header-status">PROVEEDORES</span> 
+        </header>
+
+        <main class="content">
+            <h1 class="page-title">PROVEEDORES</h1> 
+
+            <form class="form-card">
+                <div class="form-grid">
+                    <!-- Fila 1 -->
+                    <div class="field">
+                        <label>NOMBRE</label>
+                        <input type="text">
+                    </div>
+                    <div class="field">
+                        <label>NÚMERO</label>
+                        <input type="text">
+                    </div>
+                    <div></div> <!-- vacío -->
+
+                    <!-- Fila 2 -->
+                    <div class="field">
+                        <label>ENTIDAD FISCAL</label>
+                        <input type="text">
+                    </div>
+                    <div class="field">
+                        <label>CALLE</label>
+                        <input type="text">
+                    </div>
+                    <div></div> <!-- vacío -->
+
+                    <!-- Fila 3 -->
+                    <div class="field">
+                        <label>CONTACTO</label>
+                        <input type="text">
+                    </div>
+                    <div class="field">
+                        <label>COLONIA</label>
+                        <input type="text">
+                    </div>
+                    <div class="field">
+                        <label>PAÍS</label>
+                        <input type="text">
+                    </div>
+
+                    <!-- Botón debajo de Colonia -->
+                    <div></div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn-submit">SUBMIT</button>
+                    </div>
+                    <div></div>
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
