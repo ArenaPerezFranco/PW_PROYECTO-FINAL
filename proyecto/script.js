@@ -1,269 +1,204 @@
-let tabActual = 'insumos';
+// Array para almacenar productos
+let productos = [];
 
-// Inicializar
-document.addEventListener('DOMContentLoaded', function() {
-    cargarInsumos();
-    cargarProductos();
-    cargarInsumosSelect();
+// Cargar productos del localStorage al iniciar
+function loadProductsFromStorage() {
+    const stored = localStorage.getItem('productos');
+    if (stored) {
+        productos = JSON.parse(stored);
+        renderTable();
+    }
+}
+
+// Guardar productos en localStorage
+function saveProductsToStorage() {
+    localStorage.setItem('productos', JSON.stringify(productos));
+}
+
+// Renderizar la tabla
+function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    
+    if (productos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-message">No hay productos registrados</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = productos.map((producto, index) => `
+        <tr>
+            <td>${escapeHtml(producto.nombre)}</td>
+            <td>${escapeHtml(producto.unidad)}</td>
+            <td>${parseFloat(producto.peso).toFixed(2)} kg</td>
+            <td>$${parseFloat(producto.valor).toFixed(2)}</td>
+            <td>${escapeHtml(producto.descripcion) || '-'}</td>
+            <td>
+                <button class="btn-edit" onclick="editProduct(${index})">✏️ Editar</button>
+                <button class="btn-delete" onclick="deleteProduct(${index})">🗑️ Eliminar</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Función para escapar HTML y evitar XSS
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Agregar nuevo producto
+function addProduct(productData) {
+    const newProduct = {
+        nombre: productData.nombre,
+        unidad: productData.unidad,
+        peso: parseFloat(productData.peso),
+        valor: parseFloat(productData.valor),
+        descripcion: productData.descripcion || ''
+    };
+    
+    productos.push(newProduct);
+    saveProductsToStorage();
+    renderTable();
+    return true;
+}
+
+// Editar producto
+function editProduct(index) {
+    const producto = productos[index];
+    
+    // Llenar el formulario con los datos del producto
+    document.querySelector('input[name="nombre"]').value = producto.nombre;
+    document.querySelector('input[name="unidad"]').value = producto.unidad;
+    document.querySelector('input[name="peso"]').value = producto.peso;
+    document.querySelector('input[name="valor"]').value = producto.valor;
+    document.querySelector('textarea[name="descripcion"]').value = producto.descripcion;
+    
+    // Cambiar el texto del botón temporalmente
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'ACTUALIZAR PRODUCTO';
+    
+    // Eliminar el producto actual y preparar para actualización
+    productos.splice(index, 1);
+    
+    // Scroll suave al formulario
+    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+    
+    // Restaurar el texto del botón después de actualizar
+    const handleSubmit = () => {
+        submitBtn.textContent = originalText;
+        submitBtn.removeEventListener('click', handleSubmit);
+    };
+    
+    submitBtn.addEventListener('click', handleSubmit, { once: true });
+}
+
+// Eliminar producto
+function deleteProduct(index) {
+    if (confirm(`¿Estás seguro de que deseas eliminar "${productos[index].nombre}"?`)) {
+        productos.splice(index, 1);
+        saveProductsToStorage();
+        renderTable();
+        alert('Producto eliminado correctamente');
+    }
+}
+
+// Manejar el envío del formulario
+document.getElementById("productoForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    // Validar campos requeridos
+    if (!this.nombre.value || !this.unidad.value || !this.peso.value || !this.valor.value) {
+        alert('Por favor complete todos los campos obligatorios');
+        return;
+    }
+    
+    const productData = {
+        nombre: this.nombre.value,
+        unidad: this.unidad.value,
+        peso: this.peso.value,
+        valor: this.valor.value,
+        descripcion: this.descripcion.value
+    };
+    
+    // Agregar a la tabla local
+    addProduct(productData);
+    
+    // Limpiar formulario
+    this.reset();
+    
+    alert('Producto agregado exitosamente');
+    
+    // Opcional: Enviar al servidor
+    /* try {
+        const response = await fetch("guardar.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(productData)
+        });
+        
+        const result = await response.text();
+        console.log("Respuesta del servidor:", result);
+    } catch(error) {
+        console.error("Error al guardar en servidor:", error);
+    } */
 });
 
-// Cambiar entre pestañas
-function cambiarTab(tab) {
-    tabActual = tab;
-    
-    // Actualizar botones
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Actualizar contenido
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    document.getElementById(`tab-${tab}`).classList.add('active');
-    
-    // Actualizar tablas visibles
-    document.querySelectorAll('.tabla-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    document.getElementById(`tabla-${tab}`).classList.add('active');
-}
+// Cargar productos al iniciar
+loadProductsFromStorage();
 
-// ============ FUNCIONES PARA INSUMOS ============
-
-function cargarInsumos() {
-    const buscar = document.getElementById('buscarInsumo').value;
-    
-    fetch(`acciones.php?accion=cargarInsumos&buscar=${buscar}`)
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                const tbody = document.getElementById('tbodyInsumos');
-                tbody.innerHTML = '';
-                
-                data.data.forEach(insumo => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${insumo.Id_insumos}</td>
-                            <td>${insumo.nombre}</td>
-                            <td>${insumo.Descripcion}</td>
-                            <td>${insumo.Unidad_medida}</td>
-                            <td>${insumo.Peso_unitario}</td>
-                            <td>${insumo.Valor_unitario}</td>
-                            <td>${insumo.Id_FraccionYnico}</td>
-                            <td>${insumo.Id_exportacion}</td>
-                            <td>
-                                <button class="btn btn-info" onclick="editarInsumo(${insumo.Id_insumos})">Editar</button>
-                                <button class="btn btn-danger" onclick="eliminarInsumo(${insumo.Id_insumos})">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-        });
-}
-
-function guardarInsumo(event) {
-    event.preventDefault();
-    
-    const id = document.getElementById('idInsumo').value;
-    const formData = new FormData();
-    formData.append('accion', 'guardarInsumo');
-    formData.append('id', id);
-    formData.append('nombre', document.getElementById('nombreInsumo').value);
-    formData.append('descripcion', document.getElementById('descripcionInsumo').value);
-    formData.append('unidad_medida', document.getElementById('unidadMedidaInsumo').value);
-    formData.append('peso_unitario', document.getElementById('pesoUnitarioInsumo').value);
-    formData.append('valor_unitario', document.getElementById('valorUnitarioInsumo').value);
-    formData.append('id_fraccion_ynico', document.getElementById('idFraccionYnico').value);
-    formData.append('id_exportacion', document.getElementById('idExportacion').value);
-    
-    fetch('acciones.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            alert(data.message);
-            limpiarFormulario('insumos');
-            cargarInsumos();
-        } else {
-            alert(data.message);
-        }
-    });
-}
-
-function editarInsumo(id) {
-    fetch(`acciones.php?accion=obtenerInsumo&id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                const insumo = data.data;
-                document.getElementById('idInsumo').value = insumo.Id_insumos;
-                document.getElementById('nombreInsumo').value = insumo.nombre;
-                document.getElementById('descripcionInsumo').value = insumo.Descripcion;
-                document.getElementById('unidadMedidaInsumo').value = insumo.Unidad_medida;
-                document.getElementById('pesoUnitarioInsumo').value = insumo.Peso_unitario;
-                document.getElementById('valorUnitarioInsumo').value = insumo.Valor_unitario;
-                document.getElementById('idFraccionYnico').value = insumo.Id_FraccionYnico;
-                document.getElementById('idExportacion').value = insumo.Id_exportacion;
-                
-                // Scroll al formulario
-                document.getElementById('tab-insumos').scrollIntoView({behavior: 'smooth'});
-            }
-        });
-}
-
-function eliminarInsumo(id) {
-    if(confirm('¿Está seguro de eliminar este insumo?')) {
-        const formData = new FormData();
-        formData.append('accion', 'eliminarInsumo');
-        formData.append('id', id);
-        
-        fetch('acciones.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                alert(data.message);
-                cargarInsumos();
-            } else {
-                alert(data.message);
-            }
-        });
+// Función para exportar datos (opcional)
+function exportToCSV() {
+    if (productos.length === 0) {
+        alert('No hay productos para exportar');
+        return;
     }
-}
-
-// ============ FUNCIONES PARA PRODUCTOS ============
-
-function cargarProductos() {
-    const buscar = document.getElementById('buscarProducto').value;
     
-    fetch(`acciones.php?accion=cargarProductos&buscar=${buscar}`)
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                const tbody = document.getElementById('tbodyProductos');
-                tbody.innerHTML = '';
-                
-                data.data.forEach(producto => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${producto.Id_ProductoTerminado}</td>
-                            <td>${producto.nombre}</td>
-                            <td>${producto.Descripcion}</td>
-                            <td>${producto.Unidad_medida}</td>
-                            <td>${producto.Peso_unitario}</td>
-                            <td>${producto.Valor_unitario}</td>
-                            <td>${producto.Id_Insumos} - ${producto.nombre_insumo}</td>
-                            <td>
-                                <button class="btn btn-info" onclick="editarProducto(${producto.Id_ProductoTerminado})">Editar</button>
-                                <button class="btn btn-danger" onclick="eliminarProducto(${producto.Id_ProductoTerminado})">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-        });
-}
-
-function guardarProducto(event) {
-    event.preventDefault();
+    const headers = ['Nombre', 'Unidad', 'Peso (kg)', 'Valor ($)', 'Descripción'];
+    const csvRows = [];
+    csvRows.push(headers.join(','));
     
-    const id = document.getElementById('idProducto').value;
-    const formData = new FormData();
-    formData.append('accion', 'guardarProducto');
-    formData.append('id', id);
-    formData.append('nombre', document.getElementById('nombreProducto').value);
-    formData.append('descripcion', document.getElementById('descripcionProducto').value);
-    formData.append('unidad_medida', document.getElementById('unidadMedidaProducto').value);
-    formData.append('peso_unitario', document.getElementById('pesoUnitarioProducto').value);
-    formData.append('valor_unitario', document.getElementById('valorUnitarioProducto').value);
-    formData.append('id_insumos', document.getElementById('idInsumoFK').value);
-    
-    fetch('acciones.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            alert(data.message);
-            limpiarFormulario('productos');
-            cargarProductos();
-        } else {
-            alert(data.message);
-        }
-    });
-}
-
-function editarProducto(id) {
-    fetch(`acciones.php?accion=obtenerProducto&id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                const producto = data.data;
-                document.getElementById('idProducto').value = producto.Id_ProductoTerminado;
-                document.getElementById('nombreProducto').value = producto.nombre;
-                document.getElementById('descripcionProducto').value = producto.Descripcion;
-                document.getElementById('unidadMedidaProducto').value = producto.Unidad_medida;
-                document.getElementById('pesoUnitarioProducto').value = producto.Peso_unitario;
-                document.getElementById('valorUnitarioProducto').value = producto.Valor_unitario;
-                document.getElementById('idInsumoFK').value = producto.Id_Insumos;
-                
-                // Scroll al formulario
-                document.getElementById('tab-productos').scrollIntoView({behavior: 'smooth'});
-            }
-        });
-}
-
-function eliminarProducto(id) {
-    if(confirm('¿Está seguro de eliminar este producto?')) {
-        const formData = new FormData();
-        formData.append('accion', 'eliminarProducto');
-        formData.append('id', id);
-        
-        fetch('acciones.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                alert(data.message);
-                cargarProductos();
-            } else {
-                alert(data.message);
-            }
-        });
+    for (const producto of productos) {
+        const row = [
+            `"${producto.nombre}"`,
+            `"${producto.unidad}"`,
+            producto.peso,
+            producto.valor,
+            `"${producto.descripcion || ''}"`
+        ];
+        csvRows.push(row.join(','));
     }
+    
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'productos.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
-function cargarInsumosSelect() {
-    fetch('acciones.php?accion=cargarInsumosSelect')
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                const select = document.getElementById('idInsumoFK');
-                select.innerHTML = '<option value="">Seleccionar insumo</option>';
-                
-                data.data.forEach(insumo => {
-                    select.innerHTML += `<option value="${insumo.Id_insumos}">${insumo.nombre}</option>`;
-                });
-            }
-        });
-}
-
-function limpiarFormulario(tipo) {
-    if(tipo === 'insumos') {
-        document.getElementById('idInsumo').value = '';
-        document.getElementById('formInsumos').reset();
-    } else {
-        document.getElementById('idProducto').value = '';
-        document.getElementById('formProductos').reset();
-    }
-}
+// Agregar botón de exportar (opcional)
+const exportBtn = document.createElement('button');
+exportBtn.textContent = '📥 EXPORTAR CSV';
+exportBtn.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 25px;
+    background: #162844;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 1000;
+`;
+exportBtn.onclick = exportToCSV;
+document.body.appendChild(exportBtn);
