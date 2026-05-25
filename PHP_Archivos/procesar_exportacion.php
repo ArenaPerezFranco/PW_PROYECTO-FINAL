@@ -1,12 +1,17 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Recibir los datos...
     $fecha = $_POST['fecha'] ?? '';
     $cantidad = $_POST['cantidad'] ?? 0;
-    // ... (Agrega el resto de las variables igual que en importación)
-    
-    // Ojo aquí: cambia a tipo_expo
+    $unidad_medida = $_POST['unidad_medida'] ?? '';
+    $pais = $_POST['pais'] ?? '';
+    $tipo_cambio = $_POST['tipo_cambio'] ?? 0;
+    $valor_dolares = $_POST['valor_dolares'] ?? 0;
+    $costo_unitario = $_POST['costo_unitario'] ?? 0;
+    $peso_neto = $_POST['peso_neto'] ?? 0;
+    $descripcion = $_POST['descripcion'] ?? '';
+    $total = $_POST['total'] ?? 0;
+    $peso_bruto = $_POST['peso_bruto'] ?? 0;
     $tipo_expo = $_POST['tipo_expo'] ?? ''; 
     
     $total = $_POST['total'] ?? 0;
@@ -14,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Conexión a PostgreSQL
     $host = "localhost";
     $port = "5432";
-    $dbname = "nombre_de_tu_base_de_datos";
-    $user = "tu_usuario";
-    $password = "tu_contraseña";
+    $dbname = "nombre_de_la_base_de_datos";
+    $user = "usuario";
+    $password = "contraseña";
 
     $dbconn = pg_connect("host={$host} port={$port} dbname={$dbname} user={$user} password={$password}");
 

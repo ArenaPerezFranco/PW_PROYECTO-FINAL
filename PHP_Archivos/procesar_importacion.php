@@ -1,8 +1,8 @@
 <?php
-// 1. Validar que los datos vengan por POST
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // 2. Recibir los datos del formulario (los nombres coinciden con los atributos 'name' del HTML)
+    // Recibir los datos del formulario (los nombres coinciden con los atributos 'name' del HTML)
     $fecha = $_POST['fecha'] ?? '';
     $cantidad = $_POST['cantidad'] ?? 0;
     $unidad_medida = $_POST['unidad_medida'] ?? '';
@@ -16,12 +16,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total = $_POST['total'] ?? 0;
     $peso_bruto = $_POST['peso_bruto'] ?? 0;
 
-    // 3. Credenciales de conexión a PostgreSQL
+    //  Credenciales de conexión a PostgreSQL
     $host = "localhost";
     $port = "5432";
-    $dbname = "nombre_de_tu_base_de_datos"; // Cambia esto
-    $user = "tu_usuario";                   // Cambia esto
-    $password = "tu_contraseña";            // Cambia esto
+    $dbname = "nombre_de_la_base_de_datosjaja"; 
+    $user = "usuario";                   
+    $password = "contraseña";            
 
     $conn_string = "host={$host} port={$port} dbname={$dbname} user={$user} password={$password}";
     $dbconn = pg_connect($conn_string);
@@ -30,20 +30,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Error: No se pudo conectar a la base de datos.");
     }
 
-    // 4. Preparar la consulta SQL de Inserción
-    // Asegúrate de que los nombres de la tabla y columnas coincidan con tu diseño en PostgreSQL
+    // Preparar la consulta SQL de Inserción
+    // checar que los nombres sean los mismos que en psql
     $query = "INSERT INTO importaciones (
                 fecha, cantidad, unidad_medida, pais, tipo_cambio, valor_dolares, 
                 costo_unitario, tipo_impo, peso_neto, descripcion, total, peso_bruto
               ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)";
 
-    // 5. Ejecutar la consulta pasando los parámetros
+    // Ejecutar la consulta pasando los parámetros
     $result = pg_query_params($dbconn, $query, array(
         $fecha, $cantidad, $unidad_medida, $pais, $tipo_cambio, $valor_dolares,
         $costo_unitario, $tipo_impo, $peso_neto, $descripcion, $total, $peso_bruto
     ));
 
-    // 6. Verificar el resultado
+    //  Verificar el resultado
     if ($result) {
         // Redirigir de vuelta con un mensaje de éxito
         echo "<script>alert('Importación guardada con éxito'); window.location.href='importacion.html';</script>";
