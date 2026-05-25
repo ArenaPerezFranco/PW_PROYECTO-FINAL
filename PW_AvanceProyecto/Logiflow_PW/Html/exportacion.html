@@ -13,61 +13,69 @@
     <main class="content">
         <h1 class="page-title">EXPORTACIÓN</h1> 
 
-        <form class="form-card">
+        <form class="form-card" action="procesar_exportacion.php" method="POST" id="form-logiflow">
             <div class="form-grid">
                 <div class="field">
                     <label>FECHA</label>
-                    <input type="text">
+                    <input type="text" name="fecha" id="fecha">
+                    
+                    
+                    
                 </div>
                 <div class="field">
                     <label>CANTIDAD</label>
-                    <input type="number">
+                    <input type="number" name="cantidad" id="cantidad">
+                    
+                    
                 </div>
                 <div class="field">
                     <label>UNIDAD DE MEDIDA</label>
-                    <input type="text">
+                    <input type="text" name="unidad_medida" id="unidad_medida">
                 </div>
                 <div class="field">
                     <label>PAIS</label>
-                    <input type="text">
+                    <input type="text" name="pais" id="pais">
                 </div>
 
+                <!-- Fila 2 -->
                 <div class="field">
                     <label>TIPO DE CAMBIO</label>
-                    <input type="text">
+                    <input type="text" name="tipo_cambio" id="tipo_cambio">
                 </div>
                 <div class="field">
                     <label>VALOR EN DOLARES</label>
-                    <input type="text">
+                    <input type="text" name="valor_dolares" id="valor_dolares">
                 </div>
                 <div class="field">
                     <label>COSTO UNITARIO</label>
-                    <input type="text">
+                    <input type="text" name="costo_unitario" id="costo_unitario">
                 </div>
                 <div class="field">
-                    <label>TIPO DE EXPO</label> 
-                    <input type="text">
+    
+                    <label>TIPO DE IMPO</label>
+                    <input type="text" name="tipo_cambio" id="tipo_cambio">
                 </div>
 
                 <div class="field">
                     <label>PESO NETO</label>
-                    <input type="text">
+                    <input type="text" name="peso_neto" id="peso_neto">
                 </div>
                 
                 <div class="field description-field">
                     <label>DESCRIPCIÓN</label>
-                    <textarea rows="5"></textarea>
+                    <textarea rows="5" name="descripcion" id="descripcion"></textarea>
                 </div>
 
                 <div class="field">
                     <label>TOTAL</label>
-                    <input type="text">
+                    <input type="text" name="total" id="total">
                 </div>
 
                 <div class="field">
                     <label>PESO BRUTO</label>
-                    <input type="text">
+                    <input type="text" name="peso_bruto" id="peso_bruto">
                 </div>
+            </div>
             </div>
 
             <div class="form-footer">
