@@ -1,0 +1,125 @@
+<div class="main-container">
+    <header class="logiflow-header">
+        <span class="header-menu">MENU</span>
+        <div class="header-logo">
+            <span class="logo-icon">⬢</span> LOGIFLOW
+        </div>
+        <meta charset="UTF-8">
+        <span class="header-status">IMPORTACIÓN</span>
+        <link rel="stylesheet" href="estilo.css">
+        <script src="logica.js"></script>
+    </header>
+
+    <main class="content">
+        <h1 class="page-title">IMPORTACIÓN</h1>
+
+        <form class="form-card" action="procesar_importacion.php" method="POST" id="form-logiflow">
+    <div class="scroll-container">
+        
+        <h3 class="section-title">DATOS DE FACTURA</h3>
+        <div class="form-grid">
+            <div class="field">
+                <label>NÚMERO DE FACTURA</label>
+                <input type="text" name="num_factura" id="num_factura" required>
+            </div>
+            <div class="field">
+                <label>FECHA DE FACTURA</label>
+                <input type="date" name="fecha_factura" class="input-calendar" required>
+            </div>
+            <div class="field">
+                <label>MÉTODO DE PAGO</label>
+                <select name="metodo_pago" id="metodo_pago">
+                    <option value="">Seleccione...</option>
+                    <option value="PUE">PUE - Pago en una sola exhibición</option>
+                    <option value="PPD">PPD - Pago en parcialidades</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>MONEDA</label>
+                <select name="moneda" id="moneda">
+                    <option value="USD">USD - Dólares</option>
+                    <option value="MXN">MXN - Pesos Mexicanos</option>
+                </select>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3 class="section-title">DATOS DE IMPORTACIÓN</h3>
+        <div class="form-grid">
+            <div class="field">
+                <label>FECHA IMPO</label>
+                <input type="date" name="fecha" id="fecha" class="input-calendar" required>
+            </div>
+            <div class="field">
+                <label>CANTIDAD</label>
+                <input type="number" name="cantidad" id="cantidad" step="0.01">
+            </div>
+            <div class="field">
+                <label>UNIDAD DE MEDIDA</label>
+                <select name="unidad_medida" id="unidad_medida">
+                    <option value="">Seleccione...</option>
+                    <option value="Piezas">Piezas</option>
+                    <option value="Cajas">Cajas</option>
+                    <option value="Kilos">Kilos</option>
+                    <option value="Litros">Litros</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>PAIS DE ORIGEN</label>
+                <select name="pais" id="pais">
+                    <option value="">Seleccione...</option>
+                    <option value="México">México</option>
+                    <option value="USA">Estados Unidos</option>
+                    <option value="Canadá">Canadá</option>
+                    <option value="China">China</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>TIPO DE CAMBIO</label>
+                <input type="number" name="tipo_cambio" id="tipo_cambio" step="0.01">
+            </div>
+            <div class="field">
+                <label>VALOR EN DOLARES</label>
+                <input type="number" name="valor_dolares" id="valor_dolares" step="0.01">
+            </div>
+            <div class="field">
+                <label>COSTO UNITARIO</label>
+                <input type="number" name="costo_unitario" id="costo_unitario" step="0.01">
+            </div>
+            <div class="field">
+                <label>TIPO DE IMPO</label>
+                <select name="tipo_impo" id="tipo_impo">
+                    <option value="">Seleccione...</option>
+                    <option value="Definitiva">Definitiva</option>
+                    <option value="Temporal">Temporal</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>PESO NETO</label>
+                <input type="number" name="peso_neto" id="peso_neto" step="0.01">
+            </div>
+            
+            <div class="field description-field">
+                <label>DESCRIPCIÓN</label>
+                <textarea rows="5" name="descripcion" id="descripcion"></textarea>
+            </div>
+
+            <div class="field">
+                <label>TOTAL</label>
+                <input type="number" name="total" id="total" step="0.01" readonly>
+            </div>
+
+            <div class="field">
+                <label>PESO BRUTO</label>
+                <input type="number" name="peso_bruto" id="peso_bruto" step="0.01">
+            </div>
+        </div>
+    </div> <div class="form-footer">
+        <button type="submit" class="btn-submit">SUBMITT</button>
+    </div>
+</form>
+    </main>
+</div>
