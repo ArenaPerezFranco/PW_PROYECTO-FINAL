@@ -1,0 +1,175 @@
+/* --- CONFIGURACION GENERAL --- */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background: #0f172a;
+    overflow: hidden;
+    display: flex;
+}
+
+html, body{
+    width: 100%;
+    height: 100%;
+}
+
+/* --- BOTÓN TOGGLE --- */
+button.toggle{
+    position: fixed;
+    top: 30px;
+    left: 35px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* --- SIDENAV (BARRA LATERAL) --- */
+nav{
+    width: 320px;
+    height: 100vh;
+    background: #10233f;
+    padding-top: 80px;
+    transition: 0.3s ease;
+    overflow-y: auto;
+}
+
+/* NAVEGADOR MINI (COLAPSADO) */
+nav.min{
+    width: 90px;
+}
+
+/* OCULTAR TEXTO EN MODO MINI */
+nav.min span{
+    display: none;
+}
+
+/* --- ENLACES PRINCIPALES (BOTONES) --- */
+nav ul{
+    list-style: none;
+    padding: 15px;
+}
+
+nav ul li{
+    margin-bottom: 18px;
+}
+
+nav ul li .menu-btn{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: white;
+    background: #132b4a;
+    padding: 18px;
+    border-radius: 14px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+nav ul li .menu-btn:hover{
+    background: #4f7b95;
+}
+
+/* ICONOS DE LOS BOTONES PRINCIPALES */
+nav ul li .menu-btn i{
+    font-size: 20px;
+    min-width: 25px;
+}
+
+
+
+/* --- CONTENEDOR DE SUBMENÚS --- */
+.submenu-container {
+    display: none; /* Oculto por defecto */
+    background: #0d1b30; /* Un tono más oscuro para dar profundidad */
+    border-radius: 18px;
+    margin-top: 5px;
+    padding: 5px 0;
+
+}
+
+/* ENLACES INTERNOS DEL SUBMENÚ */
+.submenu-container a {
+    display: block;
+    color: #cbd5e1;
+    padding: 12px 20px;
+    padding-left: 55px; /* Desplazamiento a la derecha para alinear con el texto superior */
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.submenu-container a:hover {
+    background: #1e3a5f;
+    color: white;
+    border-radius: 8px;
+}
+
+/* CLASE ACTIVA ESTA SE CONTROLA CON JS */
+.submenu-container.show {
+    display: block;
+}
+
+/* Ocultar submenús por completo si la barra se minimiza a iconos */
+nav.min .submenu-container {
+    display: none !important;
+}
+
+/* --- ÁREA PRINCIPAL (MAIN) --- */
+main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100vh;
+}
+
+
+/* HEADER DEL CONTENIDO */
+header{
+    height: 65px;
+    background: #13233d;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 0 30px;
+    gap:10px; /*Espacio entre icono y titulo*/
+}
+
+/*CONTENEDOR DE ESTADISTICAS RIGHT*/
+header .header-right{
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*BOTON DE ESTADISTICAS*/
+.main .btn-estadisticas{
+    font-family: Arial, Helvetica, sans-serif;
+    color: aliceblue;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* IFRAME */
+.frame{
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    background: white;
+}
